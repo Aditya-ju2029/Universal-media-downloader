@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>universal media downloader · navy & yellow</title>
+  <!-- Font Awesome 6 (free icons) for clean, attractive visuals -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <style>
+    /* RESET & BASE – navy/black/yellow/white, Times New Roman */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Times New Roman', Times, serif;
+    }
+
+    body {
+      background-color: #0a192f;      /* deep navy */
+      color: #ffffff;                 /* white text on navy background */
+      line-height: 1.5;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+
+    /* main container – responsive width */
+    .container {
+      width: 90%;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 1.5rem 0.5rem;
+      flex: 1;
+    }
+
+    /* ----- TYPOGRAPHY & HEADINGS ----- */
+    h1, h2, h3 {
+      font-weight: 700;
+      letter-spacing: 0.02em;
+    }
+
+    h1 {
+      font-size: 2.8rem;
+      color: white;
+      text-shadow: 2px 2px 0 #00000080;
+      margin-bottom: 0.5rem;
+    }
+
+    h2 {
+      font-size: 2.2rem;
+      color: #ffd700;                /* yellow accent */
+      border-left: 6px solid #ffd700;
+      padding-left: 1.2rem;
+      margin: 2rem 0 1.5rem 0;
+    }
+
+    /* ----- CARD / PANEL (white background, black text) ----- */
+    .card {
+      background-color: #ffffff;
+      color: #111111;                 /* near-black text */
+      border-radius: 30px;
+      padding: 2rem 2rem;
+      box-shadow: 0 20px 30px -10px rgba(0, 0, 0, 0.7), 0 0 0 2px #ffd700 inset; /* yellow inner accent */
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 30px 40px -12px black, 0 0 0 3px #ffd700 inset;
+    }
+
+    /* ----- BUTTON (yellow / black) ----- */
+    .btn-download {
+      background-color: #ffd700;       /* vibrant yellow */
+      color: #111;
+      border: 2px solid #0a192f;
+      border-radius: 60px;
+      padding: 0 2.2rem;
+      font-size: 1.4rem;
+      font-weight: bold;
+      cursor: pointer;
+      transition: all 0.25s;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.6rem;
+      white-space: nowrap;
+      height: 60px;
+      box-shadow: 0 8px 0 #0a192f;     /* navy shadow for depth */
+      letter-spacing: 0.5px;
+    }
+
+    .btn-download i {
+      font-size: 1.4rem;
+    }
+
+    .btn-download:hover {
+      background-color: #f0c000;       /* darker yellow */
+      transform: translateY(-3px);
+      box-shadow: 0 11px 0 #0a192f;
+    }
+
+    .btn-download:active {
+      transform: translateY(5px);
+      box-shadow: 0 3px 0 #0a192f;
+    }
+
+    /* ----- INPUT & WRAPPER (navy / white / yellow) ----- */
+    .input-group {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: stretch;
+      gap: 1rem;
+      margin-bottom: 1.8rem;
+    }
+
+    .input-wrapper {
+      flex: 3 1 300px;
+      display: flex;
+      align-items: center;
+      background: white;
+      border: 3px solid #ffd700;
+      border-radius: 60px;
+      padding: 0 1.2rem;
+      transition: border 0.2s, box-shadow 0.2s;
+    }
+
+    .input-wrapper:focus-within {
+      border-color: #0a192f;
+      box-shadow: 0 0 0 4px rgba(255, 215, 0, 0.5);
+    }
+
+    .input-wrapper i {
+      color: #0a192f;
+      font-size: 1.5rem;
+      margin-right: 0.8rem;
+    }
+
+    .input-wrapper input {
+      width: 100%;
+      border: none;
+      background: transparent;
+      padding: 1.2rem 0;
+      font-size: 1.2rem;
+      color: #111;
+      outline: none;
+    }
+
+    .input-wrapper input::placeholder {
+      color: #555;
+      font-style: italic;
+    }
+
+    /* ----- OPTIONS ROW (quality/format) with white card inner style ----- */
+    .options-row {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 2rem;
+      background: #f8f8f8;            /* very light gray (almost white) */
+      padding: 1.2rem 1.8rem;
+      border-radius: 50px;
+      margin: 1rem 0 0.5rem 0;
+      border: 2px solid #0a192f;
+      color: black;
+    }
+
+    .format-radio {
+      display: flex;
+      gap: 2rem;
+      flex-wrap: wrap;
+    }
+
+    .format-radio label {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-size: 1.2rem;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .format-radio input[type="radio"] {
+      accent-color: #ffd700;
+      width: 1.2rem;
+      height: 1.2rem;
+    }
+
+    .quality-select {
+      background: white;
+      border: 2px solid #0a192f;
+      border-radius: 40px;
+      padding: 0.6rem 2rem 0.6rem 1.5rem;
+      font-size: 1.2rem;
+      font-weight: 600;
+      color: black;
+      cursor: pointer;
+      outline: none;
+    }
+
+    .quality-select:hover {
+      border-color: #ffd700;
+    }
+
+    /* ----- MESSAGE / DOWNLOAD FEEDBACK (white card, black text) ----- */
+    .message {
+      background: white;
+      color: #111;
+      padding: 1.2rem 2rem;
+      border-radius: 50px;
+      margin-top: 1.5rem;
+      border: 3px solid #0a192f;
+      font-size: 1.2rem;
+      font-weight: bold;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      box-shadow: 0 5px 0 #0a192f;
+    }
+
+    .message i {
+      color: #ffd700;
+      font-size: 2rem;
+    }
+
+    .hidden-message {
+      display: none;
+    }
+
+    /* ----- FEATURES GRID (platform cards) ----- */
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 1.8rem;
+      margin: 2rem 0;
+    }
+
+    .platform-card {
+      background: white;
+      color: #0a192f;
+      border-radius: 30px;
+      padding: 1.8rem 1rem;
+      text-align: center;
+      font-size: 1.4rem;
+      font-weight: 700;
+      border: 3px solid #ffd700;
+      transition: 0.2s;
+      box-shadow: 0 10px 0 #0a192f;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.8rem;
+    }
+
+    .platform-card i {
+      font-size: 3rem;
+      color: #0a192f;
+      background: #ffd700;
+      padding: 0.8rem;
+      border-radius: 50%;
+      width: 5rem;
+      height: 5rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .platform-card:hover {
+      transform: scale(1.02);
+      background: #ffd700;
+      color: black;
+      border-color: #0a192f;
+    }
+
+    .platform-card:hover i {
+      background: #0a192f;
+      color: #ffd700;
+    }
+
+    /* ----- HEADER & FOOTER (navy / yellow) ----- */
+    .site-header {
+      background-color: #0a192f;
+      border-bottom: 5px solid #ffd700;
+      padding: 1rem 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    .logo-area {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .logo-icon {
+      font-size: 2.5rem;
+      color: #ffd700;
+      background: black;
+      padding: 0.5rem 1rem;
+      border-radius: 60px;
+    }
+
+    .logo-text {
+      font-size: 2rem;
+      font-weight: bold;
+      color: white;
+      letter-spacing: 2px;
+    }
+
+    .logo-text span {
+      color: #ffd700;
+    }
+
+    .tagline {
+      font-size: 1.2rem;
+      color: #ddd;
+      font-style: italic;
+    }
+
+    .site-footer {
+      background: #0a192f;
+      border-top: 4px solid #ffd700;
+      padding: 2rem;
+      text-align: center;
+      color: rgba(255,255,255,0.8);
+      font-size: 1.1rem;
+    }
+
+    .site-footer i {
+      color: #ffd700;
+    }
+
+    /* ----- RESPONSIVE FINE-TUNING ----- */
+    @media (max-width: 700px) {
+      h1 { font-size: 2.2rem; }
+      .btn-download { padding: 0 1.5rem; font-size: 1.2rem; height: 55px; }
+      .input-wrapper { padding: 0 1rem; }
+      .input-wrapper input { font-size: 1rem; }
+      .options-row { flex-direction: column; align-items: stretch; gap: 1rem; }
+      .format-radio { justify-content: space-around; }
+    }
+
+    @media (max-width: 480px) {
+      .container { width: 95%; }
+      .card { padding: 1.5rem 1rem; }
+      .platform-card { font-size: 1.2rem; }
+    }
+
+    /* additional utility */
+    .text-center { text-align: center; }
+    .mt-2 { margin-top: 2rem; }
+    .mb-1 { margin-bottom: 1rem; }
+  </style>
+</head>
+<body>
+
+  <!-- header – navy & yellow -->
+  <header class="site-header">
+    <div class="logo-area">
+      <i class="fas fa-cloud-download-alt logo-icon"></i>
+      <div class="logo-text">universal<span>DOWNLOADER</span></div>
+    </div>
+    <div class="tagline">
+      <i class="fas fa-film" style="color:#ffd700;"></i> any media · one click
+    </div>
+  </header>
+
+  <main class="container">
+    <!-- hero section -->
+    <div class="text-center" style="margin-bottom: 1rem;">
+      <h1 style="color:white;"><i class="fas fa-download" style="color:#ffd700;"></i> Universal media downloader</h1>
+      <p style="font-size: 1.4rem; color: #ffd700; background: rgba(0,0,0,0.4); display: inline-block; padding: 0.5rem 2rem; border-radius: 60px;">
+        <i class="fas fa-link"></i> paste URL · choose format · download
+      </p>
+    </div>
+
+    <!-- main download card (white background) -->
+    <div class="card" style="margin-bottom: 2rem;">
+      <form method="POST">
+        {% csrf_token %}
+        <!-- URL input with icon -->
+        <div class="input-group">
+          <div class="input-wrapper">
+            <i class="fas fa-globe"></i>
+            <input type="url" name="mediaUrl" id="mediaUrl" placeholder="https:// ... from YouTube, Facebook, Vimeo, any site" required>
+          </div>
+          <button type="submit" class="btn-download"><i class="fas fa-download"></i> GET</button>
+        </div>
+
+        <!-- extra options: format radio + quality select (interactive) -->
+        <div class="options-row">
+          <div class="format-radio">
+            <label><input type="radio" name="format" value="Video (MP4)" checked> <i class="fas fa-video"></i> Video .mp4</label>
+            <label><input type="radio" name="format" value="Audio (MP3)"> <i class="fas fa-headphones"></i> Audio .mp3</label>
+          </div>
+          <select class="quality-select" id="qualitySelect">
+            <option>1080p (HD)</option>
+            <option>720p</option>
+            <option>480p</option>
+            <option>Audio only (320kbps)</option>
+          </select>
+        </div>
+
+        <!-- dynamic message area (hidden initially) -->
+        <div id="downloadMessage" class="message hidden-message">
+          <i class="fas fa-circle-check" style="color:#0a192f;"></i>
+          <span id="messageText">Your download will start shortly (demo).</span>
+        </div>
+      </form>
+    </div>
+
+    <!-- features / supported platforms -->
+    <h2><i class="fas fa-check-circle" style="color:#ffd700;"></i> supported everywhere</h2>
+    <div class="card-grid">
+      <div class="platform-card"><i class="fab fa-youtube"></i> YouTube</div>
+      <div class="platform-card"><i class="fab fa-facebook"></i> Facebook</div>
+      <div class="platform-card"><i class="fab fa-twitter"></i> Twitter</div>
+      <div class="platform-card"><i class="fab fa-instagram"></i> Instagram</div>
+      <div class="platform-card"><i class="fab fa-vimeo"></i> Vimeo</div>
+      <div class="platform-card"><i class="fas fa-link"></i> 300+ sites</div>
+    </div>
+
+    <!-- how-to steps / extra attractiveness -->
+    <div style="background: #0a192f; border: 3px dashed #ffd700; border-radius: 60px; padding: 2rem; margin: 2rem 0; color: white;">
+      <div style="display: flex; flex-wrap: wrap; gap: 2rem; justify-content: center; text-align: center;">
+        <div style="flex:1 1 150px;"><i class="fas fa-paste" style="font-size:2.5rem; color:#ffd700;"></i><br>1. paste URL</div>
+        <div style="flex:1 1 150px;"><i class="fas fa-sliders-h" style="font-size:2.5rem; color:#ffd700;"></i><br>2. pick quality</div>
+        <div style="flex:1 1 150px;"><i class="fas fa-download" style="font-size:2.5rem; color:#ffd700;"></i><br>3. download</div>
+      </div>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <p><i class="fas fa-crown" style="color:#ffd700;"></i> Universal media downloader <i class="fas fa-crown" style="color:#ffd700;"></i></p>
+    <p>⚡ navy · black · yellow · white | timeless Times New Roman ⚡</p>
+    <p style="margin-top:0.8rem;">📀 demo version – all downloads are simulated 📀</p>
+  </footer>
+
+</body>
+</html>
